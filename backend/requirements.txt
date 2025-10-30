@@ -1,0 +1,10 @@
+flask==3.1.1
+flask-cors==6.0.1
+python-dotenv==1.1.1
+requests==2.32.3
+sendgrid==6.12.5
+
+# PyTorch and ML dependencies
+torch>=2.0.0
+torch-geometric>=2.4.0
+torchdiffeq>=0.2.3

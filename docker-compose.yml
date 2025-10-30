@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # Backend API Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: hamstring-backend
+    ports:
+      - "5001:5001"
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+      - DEBUG=True
+      - SECRET_KEY=dev-secret-key-change-in-production
+      - MODEL_PATH=models/gnode_model.pth
+      - CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+      - USE_SENDGRID=${USE_SENDGRID:-false}
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+      - SENDGRID_FROM_EMAIL=${SENDGRID_FROM_EMAIL}
+      - SENDGRID_FROM_NAME=${SENDGRID_FROM_NAME:-Hamstring Injury Predictor}
+    volumes:
+      - ./backend:/app
+      - /app/__pycache__
+    restart: unless-stopped
+    networks:
+      - hamstring-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend React Service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+      args:
+        - REACT_APP_API_URL=http://localhost:5001
+    container_name: hamstring-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5001
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - hamstring-network
+    stdin_open: true
+    tty: true
+
+networks:
+  hamstring-network:
+    driver: bridge
+
+volumes:
+  backend-data:
+  frontend-node-modules:

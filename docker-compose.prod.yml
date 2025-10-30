@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  # Backend API Service (Production)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: hamstring-backend-prod
+    ports:
+      - "5001:5001"
+    environment:
+      - FLASK_ENV=production
+      - DEBUG=False
+      - SECRET_KEY=${SECRET_KEY}
+      - MODEL_PATH=models/gnode_model.pth
+      - CORS_ORIGINS=${FRONTEND_URL}
+      - USE_SENDGRID=true
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+      - SENDGRID_FROM_EMAIL=${SENDGRID_FROM_EMAIL}
+      - SENDGRID_FROM_NAME=${SENDGRID_FROM_NAME}
+    restart: always
+    networks:
+      - hamstring-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+
+  # Frontend Service (Production)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_API_URL=${BACKEND_URL}
+    container_name: hamstring-frontend-prod
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: always
+    networks:
+      - hamstring-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+networks:
+  hamstring-network:
+    driver: bridge
