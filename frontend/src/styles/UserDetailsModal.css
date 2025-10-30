@@ -1,0 +1,124 @@
+.user-details-modal {
+  max-width: 450px;
+}
+
+.user-details-modal .modal-header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.user-details-modal .modal-header h2 {
+  color: #2c3e50;
+  font-size: 24px;
+  margin: 0 0 8px 0;
+}
+
+.user-details-modal .modal-header p {
+  color: #7f8c8d;
+  font-size: 14px;
+  margin: 0;
+}
+
+.user-details-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.user-details-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.user-details-form .form-group label {
+  color: #2c3e50;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.user-details-form .form-group input {
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.user-details-form .form-group input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.user-details-form .form-group input.error {
+  border-color: #e74c3c;
+}
+
+.user-details-form .form-group input.error:focus {
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+.user-details-form .error-message {
+  color: #e74c3c;
+  font-size: 13px;
+  margin-top: -4px;
+}
+
+.user-details-form .modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.user-details-form .modal-actions button {
+  flex: 1;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.user-details-form .btn-cancel {
+  background: #ecf0f1;
+  color: #7f8c8d;
+}
+
+.user-details-form .btn-cancel:hover {
+  background: #d5dbdc;
+  transform: translateY(-1px);
+}
+
+.user-details-form .btn-submit {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.user-details-form .btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.user-details-form .btn-cancel:active,
+.user-details-form .btn-submit:active {
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .user-details-modal {
+    padding: 24px;
+    width: 95%;
+  }
+
+  .user-details-modal .modal-header h2 {
+    font-size: 20px;
+  }
+
+  .user-details-form .modal-actions {
+    flex-direction: column;
+  }
+}
